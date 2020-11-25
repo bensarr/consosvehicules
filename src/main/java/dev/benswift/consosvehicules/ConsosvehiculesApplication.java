@@ -10,6 +10,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @SpringBootApplication
 public class ConsosvehiculesApplication implements CommandLineRunner {
 
@@ -26,20 +29,35 @@ public class ConsosvehiculesApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        /*Role r1=new Role();
-        Role r2=new Role();
-        r1.setLibelle("ROLE_ADMIN");
-        r2.setLibelle("ROLE_RESPONSABLE");
-        roleRepository.save(r1);
-        roleRepository.save(r2);
-        Utilisateur u=new Utilisateur();
-        u.setUsername("admin");
-        u.setNom("ADMIN");
-        u.setPrenom("Admin");
-        //u.setRoles(roles);
-        u.setPassword(encoder.encode("brandao37"));
-        utilisateurRepository.save(u);*/
+        this.rolePrerequis("ROLE_ADMIN");
+        this.rolePrerequis("ROLE_RESPONSABLE");
+        this.utilisateurPrerequis("admin");
         System.out.println("***************"+utilisateurRepository.findAll().size()+"**********************");
 
+    }
+    private void rolePrerequis(String libelle)
+    {
+        if(!roleRepository.existsByLibelle(libelle))
+        {
+            Role r=new Role();
+            r.setLibelle(libelle);
+            roleRepository.save(r);
+        }
+    }
+    private void utilisateurPrerequis(String username)
+    {
+        if(!utilisateurRepository.existsByUsername(username))
+        {
+            List<Role> roles=new ArrayList<>();
+            roles.add(roleRepository.findByLibelle("ROLE_ADMIN"));
+            Utilisateur u=new Utilisateur();
+            u.setUsername(username);
+            u.setNom("ADMIN");
+            u.setPrenom("Admin");
+            u.setPassword(encoder.encode("brandao37"));
+            Utilisateur user=utilisateurRepository.save(u);
+            user.setRoles(roles);
+            utilisateurRepository.save(user);
+        }
     }
 }

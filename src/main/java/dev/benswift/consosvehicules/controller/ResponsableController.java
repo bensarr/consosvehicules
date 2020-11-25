@@ -1,10 +1,6 @@
 package dev.benswift.consosvehicules.controller;
 
-import dev.benswift.consosvehicules.dao.AgentRepository;
-import dev.benswift.consosvehicules.dao.CategorieRepository;
-import dev.benswift.consosvehicules.dao.ConsommationRepository;
-import dev.benswift.consosvehicules.dao.SousCategorieRepository;
-import dev.benswift.consosvehicules.dao.VehiculeRepository;
+import dev.benswift.consosvehicules.dao.*;
 import dev.benswift.consosvehicules.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -23,7 +20,6 @@ import java.util.List;
 @Controller
 @RequestMapping("/responsable")
 public class ResponsableController {
-
     @Autowired
     AgentRepository agentRepository;
     @Autowired
@@ -34,6 +30,9 @@ public class ResponsableController {
     CategorieRepository categorieRepository;
     @Autowired
     SousCategorieRepository souscategorieRepository;
+    @Autowired
+    UtilisateurRepository utilisateurRepository;
+
     private 
     String [] tabMois={"Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"};
     private
@@ -124,8 +123,10 @@ public class ResponsableController {
     }
 
     @PostMapping("/consommation/add")
-    public String consommationAdd(@ModelAttribute("consommation") Consommation consommation) {
+    public String consommationAdd(@ModelAttribute("consommation") Consommation consommation,Principal principal) {
         try {
+            Utilisateur user=utilisateurRepository.findByUsername(principal.getName());
+            consommation.setUtilisateur(user);
             consommationRepository.save(consommation);
         }catch(Exception e){
             e.printStackTrace();
