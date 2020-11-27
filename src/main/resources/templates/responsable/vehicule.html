@@ -257,6 +257,7 @@
             $("#nouveauvehicule").click(function () {
                 $('#matricule').val("");
                 $('#agent').val("0");
+                $('#saveVehicule').prop('disabled', true);
             });
             //------------------Modifications---------------------
             $('.editAgent').click(function () {
@@ -280,6 +281,14 @@
                 $('#contentConfirmMessage').empty();
                 $('#contentConfirmMessage').append('Êtes-vous sur de vouloir supprimer l\'agent ['+data[2]+''+data[1]+']');
                 $('.erreur').attr('class','text text-danger');
+            });
+            $('#agent').change(function (){
+                var idAgent=$('#agent').val();
+                if(idAgent>0) {
+                    $('#saveVehicule').prop('disabled', false);
+                }
+                else
+                    $('#saveVehicule').prop('disabled', true);
             });
         });
     </script>

@@ -190,12 +190,15 @@
     <!-- JS client caissier-->
     <script type="application/javascript">
         $(document).ready(function () {
+            var okVehicule=false;
+            var okSC=false;
             $("#nouveauconsommation").click(function () {
                 $('#vehicule').val("0");
                 $('#categorie').val("0");
                 $('#sous_categorie').val("0");
                 $('#montant').val("");
                 $('#date').val("");
+                $('#saveConsommation').prop('disabled', true);
             });
             $("#categorie").change(function () {
                 if($("#categorie").val() === ''){
@@ -228,6 +231,30 @@
                 $('#contentConfirmMessage').empty();
                 $('#contentConfirmMessage').append('Êtes-vous sur de vouloir supprimer l\'utilisateur ['+data[2]+''+data[1]+']');
                 $('.erreur').attr('class','text text-danger');
+            });
+            $('#vehicule').change(function (){
+                var idVehicule=$('#vehicule').val();
+                if(idVehicule>0) {
+                    okVehicule=true;
+                }
+                if (okVehicule && okSC)
+                {
+                    $('#saveConsommation').prop('disabled', false);
+                }
+                else
+                    $('#saveConsommation').prop('disabled', true);
+            });
+            $('#sous_categorie').change(function (){
+                var idSC=$('#sous_categorie').val();
+                if(idSC>0) {
+                    okSC=true;
+                }
+                if (okVehicule && okSC)
+                {
+                    $('#saveConsommation').prop('disabled', false);
+                }
+                else
+                    $('#saveConsommation').prop('disabled', true);
             });
 
         });
