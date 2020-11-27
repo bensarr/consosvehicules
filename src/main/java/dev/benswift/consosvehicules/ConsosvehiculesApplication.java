@@ -32,7 +32,7 @@ public class ConsosvehiculesApplication implements CommandLineRunner {
         this.rolePrerequis("ROLE_ADMIN");
         this.rolePrerequis("ROLE_RESPONSABLE");
         this.utilisateurPrerequis("admin");
-        System.out.println("***************"+utilisateurRepository.findAll().size()+"**********************");
+        System.out.println("*************  ok  **"+utilisateurRepository.findAll().size()+"**********************");
 
     }
     private void rolePrerequis(String libelle)
